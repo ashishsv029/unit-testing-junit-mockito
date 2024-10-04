@@ -62,6 +62,34 @@ Important annotations / keywords of junit
     -> we can rely on a dependency called JSONAssert for advanced json assertion
 
 
+    When testing Controller Layer, we can mock business service layer
+    when testing business service layer, we can mock data layer
+Tests are executed in a transaction, which is rolled back at the end of each test to ensure a clean state.
+    -> while testing data layer
+        -> use @DataJpaTest
+             It automatically configures an in-memory database (like H2, HSQLDB) for testing purposes.
+             It scans for JPA entities (@Entity classes) in the test context.
+             It configures Spring Data JPA repositories, allowing you to test repository methods.
+             Tests are executed in a transaction, which is rolled back at the end of each test to ensure a clean state.
+
+             @DataJpaTest
+             class UserRepositoryTest {
+
+                 @Autowired
+                 private UserRepository userRepository;
+
+                 @Test
+                 void testSaveAndFindUser() {
+                     User user = new User("John", "john@example.com");
+                     userRepository.save(user);
+
+                     User foundUser = userRepository.findById(user.getId()).orElse(null);
+                     assertThat(foundUser).isNotNull();
+                     assertThat(foundUser.getEmail()).isEqualTo("john@example.com");
+                 }
+             }
+
+
 
 Disadvantages of stub classes
     -> difficult to maintain different versions of same stubs for different testcases
