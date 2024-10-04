@@ -1,0 +1,83 @@
+There are two important frameworks for unit testing
+1. Mockito
+2. Junit - Default java test framework for unit testing (used in Spring boot testing as well)
+    -> for web layer
+    -> for data layer
+
+
+Understanding Mocking with Mockito:-
+
+Step 01: Setting up the project using Spring Initializr
+Step 02: Writing Unit Test for a Simple Business Service
+Step 03: Setting up a Business Service to call a Data Service (DAL)
+Step 04: Writing your first unit test with Stub
+    Exercise - Update Tests 2 & 3
+Step 05: Exercise Solution - Updating Tests 2 & 3 to use Stubs - Problem with Stubs.
+Step 06: Writing Unit Tests with Mocking using Mockito
+    Exercise - Updating Tests 2 & 3 to use Mockito
+Step 07: Exercise Solution - Updating Tests 2 & 3 to use Mockito
+Step 08: More Refactoring - @Mock, @InjectMocks and @RunWith(MockitoJUnitRunner.class)
+Step 09: Mockito Tips - Multiple Return Values and Specific Argument Matchers
+Step 10: Mockito Tips - Argument Matchers
+Step 11: Mockito Tips - Verify method calls
+Step 12: Mockito Tips - Argument Capture
+Step 13: Mockito Tips - Argument Capture on Multiple Calls
+Step 14: Introduction to Spy
+Step 15: Mockito FAQ
+
+
+Important annotations / keywords of junit
+    -> @Test
+    -> assertEquals
+    -> @Mock
+    -> @InjectMock
+    -> when().thenReturn().thenReturn()...
+    -> (Generic Params) Argument Matchers ex:- anyInt(), anyChar() ex:-  when(mock.get(anyInt()))
+    (Mock can also behave like Minimalistic Spy) i.e VERIFYING THE BEHAVIOUR OF FUNCTION CALLS
+    -> verify(mock).< verification of any function call of the mock > ex:- verify(mock).get(anyInt()); // it asserts whether get method of mock class has been called with any integer or not
+    -> verify(mock, times(1)).<>  // checks how many times the mock method is called
+    -> verify(mock, atleast(3)).<>
+    -> verify(mock, atleastOnce(3)).<>
+    -> verify(mock, atmost()).<>
+    -> verify(mock, never()).<>
+    // VERIFYING THE NATURE OF ARGUMENTS (Argument Capture)
+    ex:-
+    mock.add("somestring");
+    ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+    verify(mock).<any function of mock>(captor.capture()); // for ex:- verify(mock).add(captor.capture())
+    assert("somestring", captor.getValue());
+    assert(["s1", "s2"], captor.getAllValues());
+
+    mvcMock requests // for testing controllers
+    -> Response Matchers
+    EX:-
+    mockMvc().perform(request)
+    .andExpect(status().isOk())
+    .andExpect(content().string("Hello World"))
+    .andReturn();
+
+    // JSON response assertions
+      .andExpect(content().json("Stringified JSON object")); ex:= "{\"id\": 1, \"name\": \"Ashish\"}"
+
+    -> we can rely on a dependency called JSONAssert for advanced json assertion
+
+
+
+Disadvantages of stub classes
+    -> difficult to maintain different versions of same stubs for different testcases
+    -> If the main interface changes (i.e add a new function / modify an existing function, all the stub implementations should also need to be changed)
+    -> Hence mocking makes life better instead of using stubs
+
+What are Mocks and how are they better than Stubs
+    -> Using Mocks we can programmatically create classes and methods with some return data rather than maintaining a hard coded version of response using multiple classes.
+
+
+
+What is Spy and how it is different from mock
+    -> When using mock,the original behaviour of the mocked function is lost
+    -> Whereas in Spy, the original behaviour is retained and we can mock any specific function and that behaves like a mock there onwards..
+
+Limitations of Mockito
+    -> Cannot mock static methods
+    -> Cannot mock constructors
+    -> Cannot mock equals(), hashcode() as it may interfere with mockito implementation and can break mockito
